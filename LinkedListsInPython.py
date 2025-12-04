@@ -30,40 +30,88 @@ class linkedList: # Lista enlazada
     
     def __contains__(self, valor):
         actual = self.primero
-        if actual == None:
-            return False
+        while actual.next:
+            if actual.valor == valor:
+                return True
+            actual = actual.next
+            
+        return False
+
 
     def __len__(self):
-        pass
+        actual = self.primero
+        contador = 0
+        while actual.next:
+            contador += 1
+            actual = actual.next
+        
+        return contador
 
     def append(self, valor):
-        if self.primero is None:
+        if self.primero is None: # Si la lista está vacía que lo agregue derecho al elemento.
             self.primero = Nodo(valor)
         else:
             actual = self.primero
-            while actual.next:
-                if actual.next == None: # Si el siguiente nodo está vacío.
-                    actual = actual.next
-                
-                actual.next = Nodo(valor) # Entonces el siguiente nodo apuntará a mi nuevo nodo.
+            while actual.next: # Mientras que existe un nodo siguiente.
+                actual = actual.next
+
+            actual.next = Nodo(valor) # No hay nodo siguiente, así que lo hago igual al nodo que quiero añadir
 
         
     def prepend(self, valor):
-        if self.primero is None:
+        if self.primero is None: # Si la lista está vacía quiero añadirlo derecho.
             self.primero = Nodo(valor)
-        else:
-            primerNodo = self.primero
-            
+        else: # Cuando la lista no está vacía tengo que conectar el Nodo con el primer nodo de la lista
+            nodo = Nodo(valor)
+            nodo.next = self.primero
+            self.primero = nodo
+
 
     
-    def insert(self, valor):
-        pass
+    def insert(self, valor, indice): # Se pide también el índice para saber dónde conectarlo
+        actual = self.primero
+        contador = 0
+        if contador == indice: # Si quiero insertar un número en el indice 0
+            nodo = Nodo(valor)
+            nodo.next = self.primero.next
+            self.primero = nodo
+            return
+        while actual.next: # En caso contrario, busco primero contador = indice.
+            contador += 1
+            if contador == indice:
+                nodo = Nodo(valor)
+                nodo.next = actual.next.next
+                actual.next = nodo
+                return
+            actual = actual.next
+        return "No se encontró tal índice."
+
 
     def delete(self, valor):
-        pass
-    
-    def pop(self, index):
-        pass
+        actual = self.primero
+        if actual.valor == valor:
+            self.primero = actual.next
+            return
+        while actual.next:
+            if actual.next.valor == valor:
+                actual.next = actual.next.next
+                break
+            actual = actual.next
+        return "No se encontró tal valor"
+            
+    def pop(self, indice):
+        actual = self.primero
+        contador = 0
+        if contador == indice:
+            self.primero = actual.next
+            return
+        while actual.next:
+            contador += 1
+            if contador == indice:
+                actual.next = actual.next.next
+                return
+            actual = actual.next
+        return "No se encontró tal índice"
 
     # O(n) - Complejidad lineal porque debo recorrer los nodos hasta encontrar el índice
     def get(self, index): # Obtener valor en el índice dado
@@ -91,4 +139,14 @@ lista.primero = primer_nodo # Establecer el primer nodo de la lista enlazada com
 
 lista.append(15)
 
+lista.prepend(4)
+
+print(lista)
+print(lista.__len__())
+print(lista.__contains__('a'))
+
+lista.pop(3)
+print(lista)
+
+lista.insert(7, 0)
 print(lista)
